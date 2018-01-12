@@ -1,0 +1,85 @@
+Private Sub Form_Timer()
+
+If Len(Dir("C:\BD CTF\desconectar.txt")) > 0 Then
+
+DoCmd.OpenForm "FormKickOff"
+
+End If
+End Sub
+
+Private Sub ok_Click()
+
+Dim db As Database
+Dim rs As Recordset
+
+
+Static tentativas As Byte
+        
+    tentativas = tentativas + 1
+    
+    If tentativas > 3 Then
+        MsgBox "Voce esgotou as tentativas de acesso! Consulte o Administrador do Banco de Dados", vbCritical, "Administrador do Sistema!"
+        Application.Quit
+        Exit Sub
+    End If
+    
+    If IsNull(Me.Usuario) Or Me.Usuario = "" Then
+MsgBox "Nome do Usuário é Obrigatório", vbExclamation, "ATENÇÃO!"
+Me.Usuario.SetFocus
+Exit Sub
+Cancel = True
+End If
+ 
+If IsNull(Me.Senha) Or Me.Senha = "" Then
+MsgBox " A Senha é Obrigatória", vbExclamation, "ATENÇÃO!"
+Me.Senha.SetFocus
+Exit Sub
+Cancel = True
+End If
+ 
+If IsNull(Me.Plataforma) Or Me.Plataforma = "" Then
+MsgBox " Selecione uma Plataforma para iniciar", vbExclamation, "ATENÇÃO!"
+Me.Plataforma.SetFocus
+Exit Sub
+Cancel = True
+End If
+
+ 
+Set db = CurrentDb
+Set rs = db.OpenRecordset("Colaboradores")
+rs.MoveFirst
+Do While Not rs.EOF
+If rs("Usuario") = Me.Usuario Then
+ If rs("senha") = Me.Senha Then
+ achei = "s"
+    End If
+ End If
+ rs.MoveNext
+ Loop
+ If achei <> "s" Then
+ 
+ SS = MsgBox("Senha Invalida ", vbCritical, "Erro !")
+ Me.Senha = ""
+ Me.Senha.SetFocus
+ 
+
+ Else
+ 
+ DoCmd.RunMacro "RegLogin"
+  Visible = False
+  DoCmd.RunMacro "SelecPlataforma"
+  
+  
+ End If
+  
+End Sub
+
+Private Sub Form_Load()
+
+
+If Len(Dir("C:\BD CTF\desconectar.txt")) > 0 Then
+DoCmd.Close acForm, "login", acSaveYes
+DoCmd.OpenForm "FormKickOffManuten"
+End If
+
+End Sub
