@@ -1,0 +1,193 @@
+Option Compare Database
+
+Sub addAttachments3()
+Dim db As DAO.Database
+Dim rst As DAO.Recordset
+Dim rstChld As DAO.Recordset2
+Dim fldAttach As DAO.Field2
+Dim SQL As Variant
+Dim SSOP As Variant
+Dim MODULO As Variant
+Dim caminho As Variant
+Dim teste As Boolean
+
+ 'SSOP = "'" & Forms![ImpCertSelecTubPASTAS]![Texto63] & "'"
+ 'MODULO = "'" & Forms![ImpCertSelecTubPASTAS]![CaixaCombinação76] & "'"
+
+SQL = "SELECT Doc_PastaLoop.MALHA, Doc_PastaLoop.[Pag Diagrama Malha], Doc_PastaLoop.[Diagrama Malha], Doc_PastaLoop.[Diagrama Malha_NeR], Doc_PastaLoop.[Pag Lista Instrumentos], Doc_PastaLoop.[Lista Instrumentos], Doc_PastaLoop.[Lista Instrumentos_NeR], Doc_PastaLoop.[Pag Lista Cabos], Doc_PastaLoop.[Lista Cabos], Doc_PastaLoop.[Lista Cabos_NeR], Doc_PastaLoop.[Pag Diagrama Conexão], Doc_PastaLoop.[Diagrama Conexão], Doc_PastaLoop.[Diagrama Conexão_NeR], Doc_PastaLoop.[Pag Folha de Dados], Doc_PastaLoop.[Folha de Dados], Doc_PastaLoop.[Folha de Dados_NeR]" & _
+      "FROM Doc_PastaLoop; "
+
+Set db = CurrentDb
+Set rst = db.OpenRecordset(SQL)
+
+'------------------
+'Diagrama de Malha
+'------------------
+rst.MoveFirst
+Do While Not rst.EOF
+     caminho = "C:\BD CTF\22 - FABIO TULLER\BD\BK\LOOP\M09\" & rst.Fields("[Diagrama Malha_NeR]").Value & "_pag" & rst.Fields("[Pag Diagrama Malha]").Value & ".pdf"
+
+If Dir(caminho) = vbNullString Then
+   teste = False
+Else
+   teste = True
+End If
+
+If teste Then
+
+ rst.Edit
+   Set rstChld = rst.Fields("[Diagrama Malha]").Value 'para definir uma variável de registro filha.
+    rstChld.AddNew
+    Set fldAttach = rstChld.Fields("FileData")  'para adicionar um novo campo e definir o campo que armazena os dados binários
+
+       fldAttach.LoadFromFile caminho
+           On Error Resume Next
+     rstChld.Update 'para carregar o arquivo a ser anexado e atualizar o registro.
+    rstChld.Close
+   rst.Update
+rst.MoveNext
+Else
+rst.MoveNext
+End If
+
+Loop
+
+rst.Close
+
+'----------------------
+'Lista de Instrumentos
+'----------------------
+rst.MoveFirst
+Do While Not rst.EOF
+     caminho = "C:\BD CTF\22 - FABIO TULLER\BD\BK\LOOP\M09\" & rst.Fields("[Lista Instrumentos_NeR]").Value & "_pag" & rst.Fields("[Pag Lista Instrumentos]").Value & ".pdf"
+
+If Dir(caminho) = vbNullString Then
+   teste = False
+Else
+   teste = True
+End If
+
+If teste Then
+
+ rst.Edit
+   Set rstChld = rst.Fields("[Lista Instrumentos]").Value 'para definir uma variável de registro filha.
+   rstChld.AddNew
+    Set fldAttach = rstChld.Fields("FileData")  'para adicionar um novo campo e definir o campo que armazena os dados binários
+
+       fldAttach.LoadFromFile caminho
+           On Error Resume Next
+     rstChld.Update 'para carregar o arquivo a ser anexado e atualizar o registro.
+    rstChld.Close
+    rst.Update
+rst.MoveNext
+Else
+rst.MoveNext
+End If
+
+Loop
+
+rst.Close
+
+'-----------------
+'Lista Cabos
+'-----------------
+rst.MoveFirst
+Do While Not rst.EOF
+     caminho = "C:\BD CTF\22 - FABIO TULLER\BD\BK\LOOP\M09\" & rst.Fields("[Lista Cabos_NeR]").Value & "_pag" & rst.Fields("[Pag Lista Cabos]").Value & ".pdf"
+
+If Dir(caminho) = vbNullString Then
+   teste = False
+Else
+   teste = True
+End If
+
+If teste Then
+
+ rst.Edit
+   Set rstChld = rst.Fields("[Lista Cabos]").Value 'para definir uma variável de registro filha.
+    rstChld.AddNew
+    Set fldAttach = rstChld.Fields("FileData")  'para adicionar um novo campo e definir o campo que armazena os dados binários
+
+       fldAttach.LoadFromFile caminho
+           On Error Resume Next
+        rstChld.Update 'para carregar o arquivo a ser anexado e atualizar o registro.
+    rstChld.Close
+    rst.Update
+rst.MoveNext
+Else
+rst.MoveNext
+End If
+
+Loop
+
+rst.Close
+
+
+'-----------------
+'Diagrama Conexões
+'-----------------
+ rst.MoveFirst
+Do While Not rst.EOF
+     caminho = "C:\BD CTF\22 - FABIO TULLER\BD\BK\LOOP\M09\" & rst.Fields("[Diagrama Conexão_NeR]").Value & "_Pag" & rst.Fields("[Pag Diagrama Conexão]").Value & ".pdf"
+
+If Dir(caminho) = vbNullString Then
+   teste = False
+Else
+   teste = True
+End If
+
+If teste Then
+
+ rst.Edit
+   Set rstChld = rst.Fields("[Diagrama Conexão]").Value 'para definir uma variável de registro filha.
+    rstChld.AddNew
+    Set fldAttach = rstChld.Fields("FileData")  'para adicionar um novo campo e definir o campo que armazena os dados binários
+
+       fldAttach.LoadFromFile caminho
+           On Error Resume Next
+     rstChld.Update 'para carregar o arquivo a ser anexado e atualizar o registro.
+    rstChld.Close
+    rst.Update
+rst.MoveNext
+Else
+rst.MoveNext
+End If
+Loop
+
+rst.Close
+
+
+'----------------
+'Folha de Dados
+'----------------
+rst.MoveFirst
+Do While Not rst.EOF
+     caminho = "C:\BD CTF\22 - FABIO TULLER\BD\BK\LOOP\M09\" & rst.Fields("[Folha de Dados_NeR]").Value & "_pag" & rst.Fields("[Pag Folha de Dados]").Value & ".pdf"
+
+If Dir(caminho) = vbNullString Then
+   teste = False
+Else
+   teste = True
+End If
+
+If teste Then
+
+ rst.Edit
+   Set rstChld = rst.Fields("[Folha de Dados]").Value 'para definir uma variável de registro filha.
+    rstChld.AddNew
+    Set fldAttach = rstChld.Fields("FileData")  'para adicionar um novo campo e definir o campo que armazena os dados binários
+
+       fldAttach.LoadFromFile caminho
+           On Error Resume Next
+     rstChld.Update 'para carregar o arquivo a ser anexado e atualizar o registro.
+    rstChld.Close
+    rst.Update
+rst.MoveNext
+Else
+rst.MoveNext
+End If
+
+Loop
+
+rst.Close
+End Sub
